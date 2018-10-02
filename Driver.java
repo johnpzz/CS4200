@@ -35,6 +35,8 @@ public class Driver {
     }
     
     public static boolean userNumRangeCheck(String inputBoard) {
+        
+        
         int[] numbers = new int[9];
         for (int i = 0; i < 9; i++) {
             numbers[i] = Integer.parseInt(String.valueOf(inputBoard.charAt(i)));
@@ -160,14 +162,14 @@ public class Driver {
             node.heuristic = node.calculateHeuristic1();
             node2.heuristic = node2.calculateHeuristic2();
             long start = System.currentTimeMillis();
-            Node answerNode = node.aStar();
+            Node answerNode = node.aStar(1);
             long end = System.currentTimeMillis();
             answerNode.printSolution();
             System.out.println("h1 time: " + Math.abs((start-end)) + " ms.");
             
             node2.heuristic = node2.calculateHeuristic2();
             start = System.currentTimeMillis();
-            Node answerNode2 = node2.aStar();
+            Node answerNode2 = node2.aStar(2);
             end = System.currentTimeMillis();
             //answerNode2.printSolution();
             System.out.println("h2 time: " + Math.abs(start-end) + " ms.");
@@ -182,7 +184,13 @@ public class Driver {
             System.out.println("Enter your puzzle in the form of a String e.g. '123456780'.");
             String userBoard = input.nextLine();
             
-            checkBoard(userBoard);
+            try {
+                checkBoard(userBoard);
+            } catch (NumberFormatException e) {
+                System.out.println("Negative values are not allowed.  Please try again");
+                userBoard = input.nextLine();
+                checkBoard(userBoard);
+            }
           
 
             System.out.println("Correct board input!  Checking for solvability..");
@@ -209,14 +217,14 @@ public class Driver {
             node.heuristic = node.calculateHeuristic1();
             node2.heuristic = node2.calculateHeuristic2();
             long start = System.currentTimeMillis();
-            Node answerNode = node.aStar();
+            Node answerNode = node.aStar(1);
             long end = System.currentTimeMillis();
             answerNode.printSolution();
             System.out.println("h1 time: " + Math.abs((start-end)) + " ms.");
             
             node2.heuristic = node2.calculateHeuristic2();
             start = System.currentTimeMillis();
-            Node answerNode2 = node2.aStar();
+            Node answerNode2 = node2.aStar(2);
             end = System.currentTimeMillis();
             //answerNode2.printSolution();
             System.out.println("h2 time: " + Math.abs((start-end)) + " ms.");

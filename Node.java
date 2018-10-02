@@ -115,7 +115,7 @@ public class Node {
     
     
     
-    public List<Node> calculateChildren() {
+    public List<Node> calculateChildren(int h) {
         // Maximum of four possible children states
         List<Node> childrenList = new ArrayList<Node>();
         
@@ -130,9 +130,14 @@ public class Node {
                     child.board[i][j+1] = 0;
                     child.board[i][j] = temp;
                     
-                    child.heuristic = calculateHeuristic1();
-                    child.gn = this.gn + 1;
+                    if (h == 1) {
+                        child.heuristic = calculateHeuristic1();
+                    } else
+                    {
+                        child.heuristic = calculateHeuristic2();
+                    }
                     
+                    child.gn = this.gn + 1;
                     childrenList.add(child);
                     
                 } 
@@ -144,7 +149,13 @@ public class Node {
                     child.board[i][j-1] = 0;
                     child.board[i][j] = temp;
                     
-                    child.heuristic = calculateHeuristic1();
+                    if (h == 1) {
+                        child.heuristic = calculateHeuristic1();
+                    } else
+                    {
+                        child.heuristic = calculateHeuristic2();
+                    }
+                    
                     child.gn = this.gn + 1;
                     
                     childrenList.add(child);
@@ -158,7 +169,13 @@ public class Node {
                     child.board[i+1][j] = 0;
                     child.board[i][j] = temp;
                     
-                    child.heuristic = calculateHeuristic1();
+                    if (h == 1) {
+                        child.heuristic = calculateHeuristic1();
+                    } else
+                    {
+                        child.heuristic = calculateHeuristic2();
+                    }
+                    
                     child.gn = this.gn + 1;
                     
                     childrenList.add(child);
@@ -172,7 +189,12 @@ public class Node {
                     child.board[i-1][j] = 0;
                     child.board[i][j] = temp;
                     
-                    child.heuristic = calculateHeuristic1();
+                    if (h == 1) {
+                        child.heuristic = calculateHeuristic1();
+                    } else
+                    {
+                        child.heuristic = calculateHeuristic2();
+                    }
                     child.gn = this.gn + 1;
                     
                     childrenList.add(child);
@@ -188,7 +210,7 @@ public class Node {
     
 
     // Returns a solution (true), or failure (false)
-    public Node aStar() {
+    public Node aStar(int h) {
         Node initial = this;
         
         
@@ -226,7 +248,7 @@ public class Node {
             
             explored.add(next);
             
-            List<Node> children = next.calculateChildren();
+            List<Node> children = next.calculateChildren(h);
             
             for (Node n : children) {
                 if (!explored.contains(n) || !frontier.contains(n)) {
@@ -337,14 +359,22 @@ public class Node {
         List<Node> solutionList = new ArrayList<Node>();
         solutionList.add(this);
        
+        Node answerParent = null;
         
-        Node answerParent = this.parent;
-        solutionList.add(answerParent);
-        
-        while (answerParent.parent != null) {
-            answerParent = answerParent.parent;
+        if (this.parent != null) {
+            answerParent = this.parent;
             solutionList.add(answerParent);
+            
+            if (answerParent.parent != null) {
+        
+                while (answerParent.parent != null) {
+                    answerParent = answerParent.parent;
+                    solutionList.add(answerParent);
+                }
+            
+            }
         }
+        
         
         Collections.reverse(solutionList);
         
